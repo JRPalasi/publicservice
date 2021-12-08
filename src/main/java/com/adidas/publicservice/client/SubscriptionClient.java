@@ -7,18 +7,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Feign client for the subscriptions service
+ */
 @FeignClient(value = "subscriptions", url = "http://localhost:8081", configuration = SubscriptionClientConfiguration.class)
 public interface SubscriptionClient {
 
-    @RequestMapping(value = "/subscriptions", method = RequestMethod.PUT)
+    @PutMapping("/subscriptions")
     Long create(Subscription subscription);
 
-    @RequestMapping(value = "/subscriptions/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/subscriptions/{id}")
     ResponseEntity<?> cancel(@PathVariable Long id);
 
-    @RequestMapping(value = "/subscriptions", method = RequestMethod.GET)
+    @GetMapping("/subscriptions")
     List<Subscription> list();
 
-    @RequestMapping(value = "/subscriptions/{id}", method = RequestMethod.GET)
+    @GetMapping("/subscriptions/{id}")
     Subscription get(@PathVariable Long id);
 }

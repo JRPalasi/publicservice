@@ -16,15 +16,29 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * Implementation of PublicService for subscription system
+ */
 @Service
 public class PublicService implements IPublicService {
 
+    /**
+     * Subscription service client
+     */
     @Autowired
     private SubscriptionClient subscriptionClient;
 
+    /**
+     * Email service client
+     */
     @Autowired
     private EmailClient emailClient;
 
+    /**
+     * Creates a new subscription in the system and notifies the subscription owner
+     * @param subscription Subscription DTO with the data for the system
+     * @return Created Subscription in the system
+     */
     @Override
     public Subscription create(Subscription subscription) {
         Subscription created;
@@ -44,6 +58,11 @@ public class PublicService implements IPublicService {
         return created;
     }
 
+    /**
+     * Deletes the subscription identified by Id from the system  and notifies the subscription owner
+     * @param id Identifier of the subscription.
+     * @return true if cancelled
+     */
     @Override
     public boolean cancel(long id) {
         boolean cancelled = false;
@@ -60,6 +79,10 @@ public class PublicService implements IPublicService {
         return cancelled;
     }
 
+    /**
+     * Lists all the subscriptions in the system
+     * @return List of Subscriptions in the system
+     */
     @Override
     public List<Subscription> list() {
         List<Subscription> result;
@@ -75,6 +98,11 @@ public class PublicService implements IPublicService {
         return result;
     }
 
+    /**
+     * Retrieves the subscription identified by the parameter Id.
+     * @param id Identifier of the subscription
+     * @return The subscription identified*
+     */
     @Override
     public Subscription get(long id) {
         Subscription result;

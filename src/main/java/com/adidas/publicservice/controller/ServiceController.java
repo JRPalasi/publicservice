@@ -4,7 +4,6 @@ import com.adidas.publicservice.dto.Subscription;
 import com.adidas.publicservice.service.IPublicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,9 +25,9 @@ public class ServiceController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subscription created, returns Id of the created subscription"),
             @ApiResponse(responseCode = "400", description = "Could not create subscription")})
-    public ResponseEntity<Long> create(@Parameter(required = true, description = "Subscription data information")
+    public ResponseEntity<Long> create(@io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, description = "Subscription data information")
                                        @RequestBody Subscription subscription) {
-        ResponseEntity response;
+        ResponseEntity<Long> response;
         Subscription created = service.create(subscription);
         if (created != null) {
             response = ResponseEntity.ok(created.getId());
@@ -40,9 +39,12 @@ public class ServiceController {
 
     @DeleteMapping("/subscriptions/{id}")
     @Operation(summary = "Cancels a subscription identified by Id in the subscription system and it notifies the user")
-    public ResponseEntity cancel(@Parameter(required = true, description = "Id of the subscription to be cancelled")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscription cancelled"),
+            @ApiResponse(responseCode = "404", description = "Subscription does not exist")})
+    public ResponseEntity<?> cancel(@Parameter(required = true, description = "Id of the subscription to be cancelled")
                                  @PathVariable Long id) {
-        ResponseEntity response;
+        ResponseEntity<?> response;
         if (service.cancel(id)) {
             response = ResponseEntity.ok().build();
         } else {
@@ -53,8 +55,11 @@ public class ServiceController {
 
     @GetMapping("/subscriptions")
     @Operation(summary = "Lists all subscriptions in the subscription system")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of subscriptions"),
+            @ApiResponse(responseCode = "204", description = "There are no subscriptions in the system")})
     public ResponseEntity<List<Subscription>> list() {
-        ResponseEntity response;
+        ResponseEntity<List<Subscription>> response;
         List<Subscription> subscriptions = service.list();
         if (subscriptions.isEmpty()) {
             response = ResponseEntity.noContent().build();
@@ -66,9 +71,12 @@ public class ServiceController {
 
     @GetMapping("/subscriptions/{id}")
     @Operation(summary = "Retrieves a subscription in the subscription system identified by Id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subscription retrieved properly"),
+            @ApiResponse(responseCode = "404", description = "Subscription not found")})
     public ResponseEntity<Subscription> get(@Parameter(required = true, description = "Id of the subscription to be retrieved")
                                             @PathVariable Long id) {
-        ResponseEntity response;
+        ResponseEntity<Subscription> response;
         Subscription subscription = service.get(id);
         if (subscription == null) {
             response = ResponseEntity.notFound().build();

@@ -3,14 +3,38 @@ package com.adidas.publicservice.dto;
 import java.time.LocalDate;
 
 
+/**
+ * Subscription DTO for the subscription service
+ */
 public class Subscription {
 
+    /**
+     * Id of the subscription
+     */
     Long id;
+    /**
+     * Name of the subscription owner
+     */
     String name;
+    /**
+     * Email of the subscription owner
+     */
     String email;
+    /**
+     * Gender of the subscription owner
+     */
     Gender gender;
+    /**
+     * Birth date of the subscription owner
+     */
     LocalDate birthDate;
+    /**
+     * Consent for subscription is given
+     */
     boolean consentGiven;
+    /**
+     * Id of the newsletter
+     */
     Long newsletterId;
 
     public enum Gender {MALE, FEMALE}
